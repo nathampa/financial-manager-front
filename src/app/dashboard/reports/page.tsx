@@ -75,7 +75,7 @@ export default function ReportsPage() {
   const handleExport = async (format: 'csv' | 'pdf') => {
     if (!report) return;
     try {
-      const response = await api.get(`/reports/${report.id}/export/?format=${format}`, {
+      const response = await api.get(`/reports/${report.id}/export/?file_format=${format}`, {
         responseType: 'blob',
       });
       const blob = new Blob([response.data], {

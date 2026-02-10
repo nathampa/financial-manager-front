@@ -129,7 +129,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const updateProfile = async (data: Partial<RegisterData & User>) => {
     try {
-      const response = await api.put('/auth/profile/', data);
+      const response = await api.patch('/auth/profile/', data);
       setUser(response.data);
       if (response.data?.theme) {
         document.documentElement.setAttribute('data-theme', response.data.theme);

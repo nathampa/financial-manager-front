@@ -13,7 +13,7 @@ export default function CategoriesPage() {
   const [formData, setFormData] = useState({
     name: '',
     type: 'EXPENSE',
-    icon: '??',
+    icon: '📌',
     color: '#ef4444',
     description: '',
   });
@@ -34,7 +34,7 @@ export default function CategoriesPage() {
   };
 
   const resetForm = () => {
-    setFormData({ name: '', type: 'EXPENSE', icon: '??', color: '#ef4444', description: '' });
+    setFormData({ name: '', type: 'EXPENSE', icon: '📌', color: '#ef4444', description: '' });
     setEditingCategory(null);
   };
 
@@ -59,7 +59,7 @@ export default function CategoriesPage() {
     setFormData({
       name: category.name,
       type: category.type,
-      icon: category.icon || '??',
+      icon: category.icon || '📌',
       color: category.color || (category.type === 'INCOME' ? '#22c55e' : '#ef4444'),
       description: category.description || '',
     });
@@ -117,14 +117,15 @@ export default function CategoriesPage() {
               style={{ borderColor: cat.color || '#22c55e' }}
             >
               <div className="flex gap-3 mb-4">
-                <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl" style={{ backgroundColor: cat.color || '#bbf7d0' }}>
+                <div
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl"
+                  style={{ backgroundColor: cat.color || '#bbf7d0' }}
+                >
                   {cat.icon}
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-900">{cat.name}</h3>
-                  <p className="text-sm text-gray-600">
-                    {cat.transactions_count} transações
-                  </p>
+                  <p className="text-sm text-gray-600">{cat.transactions_count} transações</p>
                   {cat.is_system && (
                     <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded mt-1 inline-block">
                       Sistema
@@ -167,14 +168,15 @@ export default function CategoriesPage() {
               style={{ borderColor: cat.color || '#ef4444' }}
             >
               <div className="flex gap-3 mb-4">
-                <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl" style={{ backgroundColor: cat.color || '#fee2e2' }}>
+                <div
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl"
+                  style={{ backgroundColor: cat.color || '#fee2e2' }}
+                >
                   {cat.icon}
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-900">{cat.name}</h3>
-                  <p className="text-sm text-gray-600">
-                    {cat.transactions_count} transações
-                  </p>
+                  <p className="text-sm text-gray-600">{cat.transactions_count} transações</p>
                   {cat.is_system && (
                     <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded mt-1 inline-block">
                       Sistema
@@ -215,29 +217,21 @@ export default function CategoriesPage() {
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
-                  Nome
-                </label>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">Nome</label>
                 <input
                   type="text"
                   value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
-                  Tipo
-                </label>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">Tipo</label>
                 <select
                   value={formData.type}
-                  onChange={(e) =>
-                    setFormData({ ...formData, type: e.target.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, type: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900"
                 >
                   <option value="INCOME">Receita</option>
@@ -247,45 +241,33 @@ export default function CategoriesPage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-900 mb-2">
-                    Ícone
-                  </label>
+                  <label className="block text-sm font-semibold text-gray-900 mb-2">Ícone</label>
                   <input
                     type="text"
                     value={formData.icon}
-                    onChange={(e) =>
-                      setFormData({ ...formData, icon: e.target.value })
-                    }
+                    onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900"
-                    placeholder="??"
+                    placeholder="📌"
                     maxLength={2}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-900 mb-2">
-                    Cor
-                  </label>
+                  <label className="block text-sm font-semibold text-gray-900 mb-2">Cor</label>
                   <input
                     type="color"
                     value={formData.color}
-                    onChange={(e) =>
-                      setFormData({ ...formData, color: e.target.value })
-                    }
+                    onChange={(e) => setFormData({ ...formData, color: e.target.value })}
                     className="w-full h-10 border border-gray-300 rounded-lg"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
-                  Descrição
-                </label>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">Descrição</label>
                 <input
                   type="text"
                   value={formData.description}
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900"
                 />
               </div>
@@ -314,4 +296,4 @@ export default function CategoriesPage() {
       )}
     </div>
   );
-}
+}

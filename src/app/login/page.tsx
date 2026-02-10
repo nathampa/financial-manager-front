@@ -34,7 +34,6 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
-        {/* Logo */}
         <div className="flex items-center justify-center gap-3 mb-8">
           <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-3 rounded-xl">
             <DollarSign className="text-white" size={32} />
@@ -45,27 +44,18 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Título */}
-        <h2 className="text-2xl font-bold text-gray-900 mb-2 text-center">
-          Bem-vindo de volta!
-        </h2>
-        <p className="text-gray-700 text-center mb-6">
-          Faça login para continuar
-        </p>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2 text-center">Bem-vindo de volta!</h2>
+        <p className="text-gray-700 text-center mb-6">Faça login para continuar</p>
 
-        {/* Erro */}
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
             {error}
           </div>
         )}
 
-        {/* Formulário */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-semibold text-gray-900 mb-2">
-              E-mail
-            </label>
+            <label className="block text-sm font-semibold text-gray-900 mb-2">E-mail</label>
             <input
               type="email"
               value={email}
@@ -77,9 +67,7 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-900 mb-2">
-              Senha
-            </label>
+            <label className="block text-sm font-semibold text-gray-900 mb-2">Senha</label>
             <input
               type="password"
               value={password}
@@ -99,13 +87,9 @@ export default function LoginPage() {
           </button>
         </form>
 
-        {/* Link para registro */}
         <p className="text-center mt-6 text-gray-700">
           Não tem uma conta?{' '}
-          <Link
-            href="/register"
-            className="text-blue-600 hover:text-blue-700 font-semibold"
-          >
+          <Link href="/register" className="text-blue-600 hover:text-blue-700 font-semibold">
             Cadastre-se
           </Link>
         </p>

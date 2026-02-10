@@ -82,10 +82,10 @@ export default function ReportsPage() {
         type: format === 'pdf' ? 'application/pdf' : 'text/csv',
       });
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `report-${report.id}.${format}`;
-      a.click();
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = `report-${report.id}.${format}`;
+      anchor.click();
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error('Erro ao exportar relatório:', error);
@@ -124,6 +124,7 @@ export default function ReportsPage() {
               <option value="custom">Customizado</option>
             </select>
           </div>
+
           {formData.period === 'custom' && (
             <>
               <div>
@@ -146,12 +147,14 @@ export default function ReportsPage() {
               </div>
             </>
           )}
+
           <button
             onClick={generateReport}
             className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 font-semibold"
           >
             Gerar relatório
           </button>
+
           <div className="ml-auto flex gap-2">
             <button
               onClick={() => handleExport('csv')}
@@ -174,27 +177,19 @@ export default function ReportsPage() {
           <div className="grid md:grid-cols-4 gap-6 mb-8">
             <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white">
               <h3 className="text-sm font-semibold mb-2 opacity-90">Saldo Total</h3>
-              <p className="text-3xl font-bold">
-                {formatCurrency(report.data.summary.balance)}
-              </p>
+              <p className="text-3xl font-bold">{formatCurrency(report.data.summary.balance)}</p>
             </div>
             <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg p-6 text-white">
               <h3 className="text-sm font-semibold mb-2 opacity-90">Receitas</h3>
-              <p className="text-3xl font-bold">
-                {formatCurrency(report.data.summary.total_income)}
-              </p>
+              <p className="text-3xl font-bold">{formatCurrency(report.data.summary.total_income)}</p>
             </div>
             <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-xl shadow-lg p-6 text-white">
               <h3 className="text-sm font-semibold mb-2 opacity-90">Despesas</h3>
-              <p className="text-3xl font-bold">
-                {formatCurrency(report.data.summary.total_expense)}
-              </p>
+              <p className="text-3xl font-bold">{formatCurrency(report.data.summary.total_expense)}</p>
             </div>
             <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-lg p-6 text-white">
               <h3 className="text-sm font-semibold mb-2 opacity-90">Transações</h3>
-              <p className="text-3xl font-bold">
-                {report.data.summary.transactions_count}
-              </p>
+              <p className="text-3xl font-bold">{report.data.summary.transactions_count}</p>
             </div>
           </div>
 
@@ -255,4 +250,4 @@ export default function ReportsPage() {
       )}
     </div>
   );
-}
+}

@@ -36,6 +36,15 @@ interface ChangePasswordData {
   new_password_confirm: string;
 }
 
+type ApiError = {
+  response?: {
+    data?: {
+      detail?: string;
+      [key: string]: unknown;
+    };
+  };
+};
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -43,14 +52,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  // Carregar usuário ao iniciar
   useEffect(() => {
     loadUser();
   }, []);
 
   const loadUser = async () => {
     const token = localStorage.getItem('access_token');
-    
+
     if (!token) {
       setLoading(false);
       return;
@@ -71,6 +79,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const parseErrorMessage = (error: unknown, fallback: string) => {
+    const apiError = error as ApiError;
+    const data = apiError.response?.data;
+    if (data?.detail && typeof data.detail === 'string') {
+      return data.detail;
+    }
+
+    if (data) {
+      const firstError = Object.values(data)[0];
+      if (Array.isArray(firstError)) {
+        return String(firstError[0]);
+      }
+      if (firstError) {
+        return String(firstError);
+      }
+    }
+
+    if (error instanceof Error && error.message) {
+      return error.message;
+    }
+
+    return fallback;
+  };
+
   const login = async (email: string, password: string) => {
     try {
       const response = await api.post('/auth/login/', { email, password });
@@ -81,30 +113,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       await loadUser();
       router.push('/dashboard');
-    } catch (error: any) {
-      throw new Error(
-        error.response?.data?.detail || 'Erro ao fazer login'
-      );
+    } catch (error: unknown) {
+      throw new Error(parseErrorMessage(error, 'Erro ao fazer login'));
     }
   };
 
   const register = async (data: RegisterData) => {
     try {
       await api.post('/auth/register/', data);
-      
-      // Fazer login automático após registro
       await login(data.email, data.password);
-    } catch (error: any) {
-      const errorMessage = error.response?.data;
-      
-      if (errorMessage) {
-        const firstError = Object.values(errorMessage)[0];
-        throw new Error(
-          Array.isArray(firstError) ? firstError[0] : String(firstError)
-        );
-      }
-      
-      throw new Error('Erro ao fazer cadastro');
+    } catch (error: unknown) {
+      throw new Error(parseErrorMessage(error, 'Erro ao fazer cadastro'));
     }
   };
 
@@ -115,30 +134,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (response.data?.theme) {
         document.documentElement.setAttribute('data-theme', response.data.theme);
       }
-    } catch (error: any) {
-      const errorMessage = error.response?.data;
-      if (errorMessage) {
-        const firstError = Object.values(errorMessage)[0];
-        throw new Error(
-          Array.isArray(firstError) ? firstError[0] : String(firstError)
-        );
-      }
-      throw new Error('Erro ao atualizar perfil');
+    } catch (error: unknown) {
+      throw new Error(parseErrorMessage(error, 'Erro ao atualizar perfil'));
     }
   };
 
   const changePassword = async (data: ChangePasswordData) => {
     try {
       await api.put('/auth/change-password/', data);
-    } catch (error: any) {
-      const errorMessage = error.response?.data;
-      if (errorMessage) {
-        const firstError = Object.values(errorMessage)[0];
-        throw new Error(
-          Array.isArray(firstError) ? firstError[0] : String(firstError)
-        );
-      }
-      throw new Error('Erro ao alterar senha');
+    } catch (error: unknown) {
+      throw new Error(parseErrorMessage(error, 'Erro ao alterar senha'));
     }
   };
 
@@ -146,7 +151,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const refresh = localStorage.getItem('refresh_token');
     if (refresh) {
       api.post('/auth/logout/', { refresh }).catch(() => {
-        // ignore logout errors
+        // ignora falha de logout remoto
       });
     }
     localStorage.removeItem('access_token');

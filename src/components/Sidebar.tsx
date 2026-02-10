@@ -29,7 +29,6 @@ export default function Sidebar() {
 
   return (
     <div className="w-64 bg-gradient-to-b from-blue-600 to-blue-800 text-white h-screen fixed left-0 top-0 flex flex-col">
-      {/* Logo */}
       <div className="p-6 border-b border-blue-500">
         <div className="flex items-center gap-3">
           <DollarSign size={32} />
@@ -40,7 +39,6 @@ export default function Sidebar() {
         </div>
       </div>
 
-      {/* Menu */}
       <nav className="flex-1 p-4">
         {menuItems.map((item) => {
           const Icon = item.icon;
@@ -51,9 +49,7 @@ export default function Sidebar() {
               key={item.href}
               href={item.href}
               className={`w-full flex items-center gap-3 p-3 rounded-lg mb-2 transition-colors ${
-                isActive
-                  ? 'bg-blue-700'
-                  : 'hover:bg-blue-700'
+                isActive ? 'bg-blue-700' : 'hover:bg-blue-700'
               }`}
             >
               <Icon size={20} />
@@ -63,13 +59,14 @@ export default function Sidebar() {
         })}
       </nav>
 
-      {/* User info e logout */}
       <div className="p-4 border-t border-blue-500">
         <div className="mb-3 px-3">
           <p className="text-sm text-blue-200">Bem-vindo,</p>
-          <p className="font-semibold truncate">{user?.full_name || user?.first_name || user?.username}</p>
+          <p className="font-semibold truncate">
+            {user?.full_name || user?.first_name || user?.username}
+          </p>
         </div>
-        
+
         <Link
           href="/dashboard/settings"
           className="flex items-center gap-3 p-3 hover:bg-blue-700 rounded-lg cursor-pointer mb-2"
@@ -77,7 +74,7 @@ export default function Sidebar() {
           <Settings size={20} />
           <span>Configurações</span>
         </Link>
-        
+
         <button
           onClick={logout}
           className="w-full flex items-center gap-3 p-3 hover:bg-blue-700 rounded-lg cursor-pointer text-left"

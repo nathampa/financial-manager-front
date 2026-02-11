@@ -26,17 +26,28 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    const originalRequest = error.config;
+    const originalRequest = error.config as {
+      _retry?: boolean;
+      url?: string;
+      headers?: Record<string, string>;
+    };
+    const requestUrl = originalRequest?.url || '';
+    const isAuthEndpoint = /\/auth\/(login|register|refresh|logout)\//.test(requestUrl);
+
+    // Nunca tenta refresh para endpoints de autenticação.
+    if (isAuthEndpoint) {
+      return Promise.reject(error);
+    }
 
     // Se erro 401 e não é retry
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
         const refreshToken = localStorage.getItem('refresh_token');
         
         if (!refreshToken) {
-          throw new Error('No refresh token');
+          return Promise.reject(error);
         }
 
         const response = await axios.post(
@@ -53,7 +64,9 @@ api.interceptors.response.use(
         // Logout se refresh falhar
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
-        window.location.href = '/login';
+        if (window.location.pathname !== '/login') {
+          window.location.href = '/login';
+        }
         return Promise.reject(refreshError);
       }
     }
